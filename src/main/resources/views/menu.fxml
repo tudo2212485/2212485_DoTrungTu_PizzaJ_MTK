@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+
+<BorderPane xmlns="http://javafx.com/javafx/19" 
+            xmlns:fx="http://javafx.com/fxml/1" 
+            fx:controller="com.pizza.ui.controllers.MenuController"
+            styleClass="root-pane">
+    
+    <!-- Top: Header -->
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="20.0" styleClass="header-bar">
+            <padding>
+                <Insets top="15.0" right="20.0" bottom="15.0" left="20.0"/>
+            </padding>
+            
+            <Button text="← Trang Chủ" onAction="#handleBackToHome" styleClass="nav-button"/>
+            
+            <Region HBox.hgrow="ALWAYS"/>
+            
+            <Label fx:id="cartCountLabel" text="Giỏ hàng: 0 món" styleClass="cart-label">
+                <font>
+                    <Font size="14.0"/>
+                </font>
+            </Label>
+            
+            <Button text="Xem Giỏ Hàng" onAction="#handleViewCart" styleClass="primary-button"/>
+        </HBox>
+    </top>
+    
+    <!-- Center: Pizza Builder -->
+    <center>
+        <ScrollPane fitToWidth="true" fitToHeight="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" 
+                    style="-fx-background-color: transparent;" pannable="false">
+            <HBox spacing="25.0" alignment="CENTER" fillHeight="true">
+                <padding>
+                    <Insets top="15.0" right="25.0" bottom="15.0" left="25.0"/>
+                </padding>
+                
+                <!-- Left: Pizza Image and Info -->
+                <VBox spacing="12.0" alignment="TOP_CENTER" styleClass="pizza-card" 
+                      HBox.hgrow="SOMETIMES" minWidth="350.0" maxWidth="400.0" prefWidth="380.0">
+                    <padding>
+                        <Insets top="15.0" right="15.0" bottom="15.0" left="15.0"/>
+                    </padding>
+                    
+                    <Label text="🍕 Pizza Của Bạn" styleClass="subsection-title">
+                        <font><Font name="System Bold" size="16.0"/></font>
+                    </Label>
+                    
+                    <ImageView fx:id="pizzaImageView" fitWidth="200.0" fitHeight="200.0" preserveRatio="true"/>
+                
+                <Label fx:id="pizzaDescriptionLabel" text="Pizza cổ điển với sốt cà chua..." 
+                       styleClass="pizza-description" wrapText="true" maxWidth="280.0" textAlignment="CENTER">
+                    <font><Font size="13.0" name="System Italic"/></font>
+                </Label>
+                
+                <!-- Preview Box -->
+                <VBox spacing="6.0" alignment="CENTER" styleClass="preview-box">
+                    <padding>
+                        <Insets top="10.0" right="10.0" bottom="10.0" left="10.0"/>
+                    </padding>
+                    
+                    <Label text="✨ Xem Trước:" styleClass="subsection-title">
+                        <font><Font size="13.0"/></font>
+                    </Label>
+                    <Label fx:id="previewLabel" text="Margherita (Vừa)" 
+                           styleClass="preview-text">
+                        <font><Font size="15.0"/></font>
+                    </Label>
+                    <Label fx:id="priceLabel" text="75,000đ" styleClass="price-text">
+                        <font><Font name="System Bold" size="20.0"/></font>
+                    </Label>
+                </VBox>
+            </VBox>
+            
+            <!-- Right: Selection Controls -->
+            <VBox spacing="16.0" alignment="TOP_CENTER" 
+                  HBox.hgrow="SOMETIMES" minWidth="350.0" maxWidth="400.0" prefWidth="380.0">
+                <padding>
+                    <Insets top="15.0"/>
+                </padding>
+                
+                <Label text="🛠️ Tùy Chỉnh" styleClass="section-title">
+                    <font><Font name="System Bold" size="20.0"/></font>
+                </Label>
+                
+                <!-- Pizza Selection -->
+                <VBox spacing="10.0">
+                    <Label text="Loại Pizza:">
+                        <font><Font size="14.0" name="System Bold"/></font>
+                    </Label>
+                    <ComboBox fx:id="pizzaTypeCombo" prefWidth="330.0" prefHeight="38.0"/>
+                    
+                    <Label text="Kích Thước:">
+                        <font><Font size="14.0" name="System Bold"/></font>
+                        <VBox.margin>
+                            <Insets top="5.0"/>
+                        </VBox.margin>
+                    </Label>
+                    <ComboBox fx:id="sizeCombo" prefWidth="330.0" prefHeight="38.0"/>
+                </VBox>
+            
+                <!-- Toppings -->
+                <VBox spacing="10.0">
+                    <Label text="🧀 Thêm Topping:">
+                        <font><Font size="14.0" name="System Bold"/></font>
+                        <VBox.margin>
+                            <Insets top="5.0"/>
+                        </VBox.margin>
+                    </Label>
+                    
+                    <VBox spacing="8.0">
+                        <CheckBox fx:id="cheeseCheck" text="Phô mai thêm (+10,000đ)">
+                            <font><Font size="13.0"/></font>
+                        </CheckBox>
+                        <CheckBox fx:id="baconCheck" text="Thịt xông khói (+15,000đ)">
+                            <font><Font size="13.0"/></font>
+                        </CheckBox>
+                        <CheckBox fx:id="mushroomCheck" text="Nấm (+8,000đ)">
+                            <font><Font size="13.0"/></font>
+                        </CheckBox>
+                    </VBox>
+                </VBox>
+                
+                <!-- Quantity -->
+                <HBox spacing="12.0" alignment="CENTER_LEFT">
+                    <Label text="Số Lượng:">
+                        <font><Font size="14.0" name="System Bold"/></font>
+                    </Label>
+                    <Spinner fx:id="quantitySpinner" prefWidth="110.0" prefHeight="33.0"/>
+                </HBox>
+                
+                <!-- Add to Cart Button -->
+                <Button text="🛒 Thêm Vào Giỏ" onAction="#handleAddToCart" 
+                        styleClass="primary-button" prefWidth="330.0" prefHeight="45.0">
+                    <font>
+                        <Font size="16.0"/>
+                    </font>
+                    <VBox.margin>
+                        <Insets top="10.0"/>
+                    </VBox.margin>
+                </Button>
+            </VBox>
+            
+        </HBox>
+        </ScrollPane>
+    </center>
+    
+</BorderPane>
+
+
+
+
+
