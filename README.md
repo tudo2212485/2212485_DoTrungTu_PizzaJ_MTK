@@ -1,85 +1,87 @@
-# 🍕 Pizza Order Application
+# 🍕 Ứng Dụng Đặt Pizza
 
-A comprehensive JavaFX desktop application demonstrating Object-Oriented Programming principles and four essential design patterns: **Factory**, **Decorator**, **Strategy**, and **Observer**.
+Ứng dụng JavaFX desktop toàn diện minh họa các nguyên lý Lập trình Hướng đối tượng (OOP) và bốn mẫu thiết kế thiết yếu: **Factory**, **Decorator**, **Strategy**, và **Observer**.
 
-## 📋 Table of Contents
-- [Features](#features)
-- [Technology Stack](#technology-stack)
-- [Design Patterns](#design-patterns)
-- [Project Structure](#project-structure)
-- [Getting Started](#getting-started)
-- [Usage](#usage)
-- [Testing](#testing)
+## 📋 Mục Lục
+- [Tính Năng](#tính-năng)
+- [Công Nghệ Sử Dụng](#công-nghệ-sử-dụng)
+- [Các Mẫu Thiết Kế](#các-mẫu-thiết-kế)
+- [Cấu Trúc Dự Án](#cấu-trúc-dự-án)
+- [Bắt Đầu](#bắt-đầu)
+- [Hướng Dẫn Sử Dụng](#hướng-dẫn-sử-dụng)
+- [Kiểm Thử](#kiểm-thử)
+- [Cơ Sở Dữ Liệu](#cơ-sở-dữ-liệu)
+- [Nguyên Lý OOP](#nguyên-lý-oop)
 
-## ✨ Features
+## ✨ Tính Năng
 
-- **Pizza Customization**: Choose from multiple pizza types (Margherita, Pepperoni, Hawaiian) and sizes (S, M, L)
-- **Dynamic Toppings**: Add extra toppings (cheese, bacon, mushroom) with real-time price updates
-- **Shopping Cart**: View and manage your order with automatic total calculations
-- **Flexible Shipping**: Select between Standard and Express shipping with different pricing strategies
-- **Order Persistence**: All orders are saved to a SQLite database
-- **Modern UI**: Clean, intuitive JavaFX interface with custom styling
+- **Tùy Chỉnh Pizza**: Chọn từ nhiều loại pizza (Margherita, Pepperoni, Hawaiian, Seafood, Veggie Supreme) và kích thước (S, M, L)
+- **Thêm Topping Linh Hoạt**: Thêm topping bổ sung (phô mai, thịt xông khói, nấm) với cập nhật giá theo thời gian thực
+- **Giỏ Hàng**: Xem và quản lý đơn hàng với tính toán tổng tiền tự động
+- **Phương Thức Vận Chuyển Linh Hoạt**: Chọn giữa vận chuyển Tiêu chuẩn và Hỏa tốc với các chiến lược định giá khác nhau
+- **Lưu Trữ Đơn Hàng**: Tất cả đơn hàng được lưu vào cơ sở dữ liệu SQLite
+- **Giao Diện Hiện Đại**: Giao diện JavaFX trực quan, sạch sẽ với tùy chỉnh CSS
 
-## 🛠 Technology Stack
+## 🛠 Công Nghệ Sử Dụng
 
 - **Java**: 17
 - **JavaFX**: 19.0.2.1
-- **SQLite**: 3.41.2.2 (via JDBC)
+- **SQLite**: 3.41.2.2 (qua JDBC)
 - **JUnit**: 5.9.2
-- **Build Tool**: Maven
+- **Công Cụ Build**: Maven
 
-## 🎯 Design Patterns
+## 🎯 Các Mẫu Thiết Kế
 
-### 1. Factory Pattern 🏭
-**Location**: `com.pizza.domain.factory.PizzaFactory`
+### 1. Factory Pattern (Mẫu Nhà Máy) 🏭
+**Vị trí**: `com.pizza.domain.factory.PizzaFactory`
 
-**Purpose**: Creates pizza objects without exposing instantiation logic to the client.
+**Mục đích**: Tạo các đối tượng pizza mà không để lộ logic khởi tạo cho client.
 
-**Implementation**:
+**Cách triển khai**:
 ```java
 Pizza pizza = PizzaFactory.create("Margherita", Size.M);
 ```
 
-**Benefits**:
-- Encapsulates object creation logic
-- Makes it easy to add new pizza types
-- Follows the Open/Closed Principle
+**Lợi ích**:
+- Đóng gói logic tạo đối tượng
+- Dễ dàng thêm loại pizza mới
+- Tuân theo nguyên lý Open/Closed (Mở để mở rộng, đóng để sửa đổi)
 
-**Code Reference**: See `PizzaFactory.java` lines 14-30
+**Tham chiếu code**: Xem `PizzaFactory.java` dòng 30-43
 
 ---
 
-### 2. Decorator Pattern 🎨
-**Location**: `com.pizza.domain.decorator.*`
+### 2. Decorator Pattern (Mẫu Trang Trí) 🎨
+**Vị trí**: `com.pizza.domain.decorator.*`
 
-**Purpose**: Dynamically adds toppings to pizzas without modifying the base Pizza classes.
+**Mục đích**: Thêm topping động vào pizza mà không sửa đổi các class Pizza cơ bản.
 
-**Implementation**:
+**Cách triển khai**:
 ```java
 Pizza pizza = PizzaFactory.create("Pepperoni", Size.L);
-pizza = new Cheese(pizza);      // Add cheese topping
-pizza = new Bacon(pizza);       // Add bacon topping
-pizza = new Mushroom(pizza);    // Add mushroom topping
+pizza = new Cheese(pizza);      // Thêm topping phô mai
+pizza = new Bacon(pizza);       // Thêm topping thịt xông khói
+pizza = new Mushroom(pizza);    // Thêm topping nấm
 ```
 
-**Benefits**:
-- Extends functionality at runtime
-- Follows Single Responsibility Principle
-- Flexible alternative to subclassing
-- Each topping can be added independently
+**Lợi ích**:
+- Mở rộng chức năng tại runtime
+- Tuân theo nguyên lý Single Responsibility (Trách nhiệm đơn lẻ)
+- Thay thế linh hoạt cho việc phân lớp con
+- Mỗi topping có thể được thêm độc lập
 
-**Code Reference**: 
+**Tham chiếu code**: 
 - Abstract Decorator: `ToppingDecorator.java`
 - Concrete Decorators: `Cheese.java`, `Bacon.java`, `Mushroom.java`
 
 ---
 
-### 3. Strategy Pattern 📦
-**Location**: `com.pizza.domain.strategy.*`
+### 3. Strategy Pattern (Mẫu Chiến Lược) 📦
+**Vị trí**: `com.pizza.domain.strategy.*`
 
-**Purpose**: Defines interchangeable shipping fee calculation algorithms.
+**Mục đích**: Định nghĩa các thuật toán tính phí vận chuyển có thể thay thế lẫn nhau.
 
-**Implementation**:
+**Cách triển khai**:
 ```java
 ShippingStrategy standard = new StandardShipping();
 int fee = standard.calculateFee(subtotal);
@@ -88,52 +90,52 @@ ShippingStrategy express = new ExpressShipping();
 int fee = express.calculateFee(subtotal);
 ```
 
-**Strategies**:
-- **StandardShipping**: Free if subtotal ≥ 200,000 VND, otherwise 20,000 VND
-- **ExpressShipping**: Flat fee of 40,000 VND
+**Các chiến lược**:
+- **StandardShipping**: Miễn phí nếu tổng tiền ≥ 200,000 VND, ngược lại 20,000 VND
+- **ExpressShipping**: Phí cố định 40,000 VND
 
-**Benefits**:
-- Encapsulates algorithms in separate classes
-- Makes algorithms interchangeable
-- Easy to add new shipping methods
-- Eliminates conditional statements
+**Lợi ích**:
+- Đóng gói các thuật toán trong các class riêng biệt
+- Làm cho các thuật toán có thể thay thế lẫn nhau
+- Dễ dàng thêm phương thức vận chuyển mới
+- Loại bỏ các câu lệnh điều kiện
 
-**Code Reference**: 
+**Tham chiếu code**: 
 - Interface: `ShippingStrategy.java`
 - Implementations: `StandardShipping.java`, `ExpressShipping.java`
 
 ---
 
-### 4. Observer Pattern 👁️
-**Location**: `com.pizza.app.EventBus`
+### 4. Observer Pattern (Mẫu Quan Sát) 👁️
+**Vị trí**: `com.pizza.app.EventBus`
 
-**Purpose**: Notifies UI components when the cart changes, enabling automatic updates.
+**Mục đích**: Thông báo cho các component UI khi giỏ hàng thay đổi, cho phép cập nhật tự động.
 
-**Implementation**:
+**Cách triển khai**:
 ```java
-// Subscribe to cart updates
+// Đăng ký nhận cập nhật giỏ hàng
 EventBus.getInstance().subscribe("CART_UPDATED", data -> {
     updateCartDisplay();
 });
 
-// Publish event when cart changes
+// Phát sự kiện khi giỏ hàng thay đổi
 EventBus.getInstance().publish("CART_UPDATED");
 ```
 
-**Benefits**:
-- Decouples event publishers from subscribers
-- Automatic UI updates when data changes
-- Supports multiple observers
-- Promotes loose coupling
+**Lợi ích**:
+- Tách rời người phát sự kiện khỏi người đăng ký
+- Cập nhật UI tự động khi dữ liệu thay đổi
+- Hỗ trợ nhiều observer
+- Thúc đẩy loose coupling (liên kết lỏng lẻo)
 
-**Code Reference**: 
+**Tham chiếu code**: 
 - EventBus: `EventBus.java`
-- Publisher: `CartService.java` (lines 43, 53, 60, 73)
-- Subscribers: `MenuController.java` (line 45), `CartController.java` (line 73)
+- Publisher: `CartService.java` (dòng 43, 53, 60, 73)
+- Subscribers: `MenuController.java` (dòng 45), `CartController.java` (dòng 73)
 
 ---
 
-## 📁 Project Structure
+## 📁 Cấu Trúc Dự Án
 
 ```
 pizza-order-app/
@@ -141,14 +143,16 @@ pizza-order-app/
 │   ├── main/
 │   │   ├── java/com/pizza/
 │   │   │   ├── domain/
-│   │   │   │   ├── pizza/          # Pizza hierarchy (OOP)
-│   │   │   │   │   ├── Pizza.java           (Abstract base)
+│   │   │   │   ├── pizza/          # Phân cấp Pizza (OOP)
+│   │   │   │   │   ├── Pizza.java           (Base trừu tượng)
 │   │   │   │   │   ├── Size.java            (Enum)
 │   │   │   │   │   ├── Margherita.java      (Concrete)
 │   │   │   │   │   ├── Pepperoni.java       (Concrete)
-│   │   │   │   │   └── Hawaiian.java        (Concrete)
+│   │   │   │   │   ├── Hawaiian.java        (Concrete)
+│   │   │   │   │   ├── Seafood.java         (Concrete)
+│   │   │   │   │   └── VeggieSupreme.java   (Concrete)
 │   │   │   │   ├── decorator/      # Decorator Pattern
-│   │   │   │   │   ├── ToppingDecorator.java (Abstract)
+│   │   │   │   │   ├── ToppingDecorator.java (Trừu tượng)
 │   │   │   │   │   ├── Cheese.java          (Concrete)
 │   │   │   │   │   ├── Bacon.java           (Concrete)
 │   │   │   │   │   └── Mushroom.java        (Concrete)
@@ -164,9 +168,11 @@ pizza-order-app/
 │   │   │   │   └── PriceCalculator.java
 │   │   │   ├── infra/db/           # Database Layer
 │   │   │   │   ├── SQLiteConnection.java
-│   │   │   │   └── OrderRepository.java
+│   │   │   │   ├── OrderRepository.java
+│   │   │   │   └── PizzaRepository.java
 │   │   │   └── ui/                 # UI Layer
 │   │   │       ├── MainApp.java
+│   │   │       ├── Launcher.java
 │   │   │       └── controllers/
 │   │   │           ├── HomeController.java
 │   │   │           ├── MenuController.java
@@ -186,99 +192,103 @@ pizza-order-app/
 └── README.md
 ```
 
-## 🚀 Getting Started
+## 🚀 Bắt Đầu
 
-### Prerequisites
+### Yêu Cầu
 
-- **Java JDK 17 or higher**
+- **Java JDK 17 trở lên**
 - **Maven 3.6+**
 
-### Installation
+### Cài Đặt
 
-1. **Clone or extract the project**:
+1. **Clone hoặc giải nén dự án**:
    ```bash
    cd pizza-order-app
    ```
 
-2. **Verify Maven and Java versions**:
+2. **Kiểm tra phiên bản Maven và Java**:
    ```bash
    mvn -v
    java -version
    ```
 
-3. **Build the project**:
+3. **Build dự án**:
    ```bash
    mvn clean install
    ```
 
-4. **Run the application**:
+4. **Chạy ứng dụng**:
    ```bash
    mvn javafx:run
    ```
 
-## 📖 Usage
+## 📖 Hướng Dẫn Sử Dụng
 
-### Main Workflow
+### Quy Trình Chính
 
-1. **Home Screen**: 
-   - Click "Browse Menu" to start ordering
-   - Click "View Cart / Checkout" to see your cart
+1. **Màn Hình Chính**: 
+   - Click "Browse Menu" (Xem Menu) để bắt đầu đặt hàng
+   - Click "View Cart / Checkout" (Xem Giỏ Hàng / Thanh Toán) để xem giỏ hàng
 
-2. **Menu Screen**:
-   - Select pizza type (Margherita, Pepperoni, or Hawaiian)
-   - Choose size (S, M, L)
-   - Add extra toppings (optional)
-   - Set quantity
-   - Click "Add to Cart"
-   - View real-time price preview
+2. **Màn Hình Menu**:
+   - Chọn loại pizza (Margherita, Pepperoni, Hawaiian, Seafood, hoặc Veggie Supreme)
+   - Chọn kích thước (S, M, L)
+   - Thêm topping bổ sung (tùy chọn)
+   - Đặt số lượng
+   - Click "Add to Cart" (Thêm vào Giỏ)
+   - Xem giá cả hiển thị theo thời gian thực
 
-3. **Cart Screen**:
-   - Review your items
-   - Remove items if needed
-   - Select shipping method:
-     - **Standard**: Free for orders ≥200k, otherwise 20k
-     - **Express**: Flat 40k
-   - View automatic total calculation
-   - Enter delivery information
-   - Click "Place Order" to complete
+3. **Màn Hình Giỏ Hàng**:
+   - Xem lại các món đã chọn
+   - Xóa món nếu cần
+   - Chọn phương thức vận chuyển:
+     - **Tiêu chuẩn (Standard)**: Miễn phí cho đơn hàng ≥200k, ngược lại 20k
+     - **Hỏa tốc (Express)**: Phí cố định 40k
+   - Xem tổng tiền tự động tính toán
+   - Nhập thông tin giao hàng
+   - Click "Place Order" (Đặt Hàng) để hoàn tất
 
-### Pricing
+### Bảng Giá
 
-**Base Prices by Pizza Type**:
+**Giá Cơ Bản Theo Loại Pizza**:
 - Margherita: 60,000 VND
 - Pepperoni: 90,000 VND
 - Hawaiian: 80,000 VND
+- Seafood: 120,000 VND
+- Veggie Supreme: 70,000 VND
 
-**Size Modifiers**:
+**Điều Chỉnh Theo Kích Thước**:
 - Small (S): +0 VND
 - Medium (M): +15,000 VND
 - Large (L): +30,000 VND
 
-**Topping Prices**:
-- Extra Cheese: 10,000 VND
-- Bacon: 15,000 VND
-- Mushroom: 8,000 VND
+**Giá Topping**:
+- Extra Cheese (Phô mai): 10,000 VND
+- Bacon (Thịt xông khói): 15,000 VND
+- Mushroom (Nấm): 8,000 VND
 
-**Example**:
+**Ví dụ**:
 - Pepperoni Large (120,000) + Cheese (10,000) + Bacon (15,000) = **145,000 VND**
+- Seafood Medium (135,000) + Mushroom (8,000) = **143,000 VND**
+- Veggie Supreme Small (70,000) + Cheese (10,000) = **80,000 VND**
 
-## 🧪 Testing
+## 🧪 Kiểm Thử
 
-### Run All Tests
+### Chạy Tất Cả Tests
 
 ```bash
 mvn test
 ```
 
-### Test Coverage
+### Phạm Vi Test
 
-The project includes comprehensive unit tests:
+Dự án bao gồm các unit test toàn diện:
 
-1. **PriceCalculatorTest**: Tests price calculations with decorators and strategies
-2. **StrategyTest**: Tests shipping fee calculations and boundary conditions
-3. **DecoratorTest**: Tests topping decoration and price accumulation
+1. **PriceCalculatorTest**: Kiểm tra tính toán giá với decorator và strategy
+2. **StrategyTest**: Kiểm tra tính toán phí vận chuyển và các điều kiện biên
+3. **DecoratorTest**: Kiểm tra decoration topping và tích lũy giá
 
-### Example Test Run Output
+### Ví Dụ Kết Quả Test
 
 ```
 [INFO] -------------------------------------------------------
@@ -296,14 +306,14 @@ The project includes comprehensive unit tests:
 [INFO] Tests run: 21, Failures: 0, Errors: 0, Skipped: 0
 ```
 
-## 💾 Database
+## 💾 Cơ Sở Dữ Liệu
 
-The application uses SQLite to persist orders. The database file `pizza_orders.db` is created automatically in the project root on first run.
+Ứng dụng sử dụng SQLite để lưu trữ đơn hàng. File cơ sở dữ liệu `pizza_orders.db` được tạo tự động trong thư mục gốc dự án khi chạy lần đầu.
 
 **Schema**:
 
 ```sql
--- Orders table
+-- Bảng đơn hàng
 CREATE TABLE orders (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     customer_name TEXT NOT NULL,
@@ -316,7 +326,7 @@ CREATE TABLE orders (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
--- Order items table
+-- Bảng chi tiết đơn hàng
 CREATE TABLE order_items (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     order_id INTEGER NOT NULL,
@@ -328,27 +338,25 @@ CREATE TABLE order_items (
 );
 ```
 
-## 🎓 OOP Principles Demonstrated
+## 🎓 Nguyên Lý OOP
 
-1. **Encapsulation**: Private fields with public getters (Pizza, CartService)
-2. **Inheritance**: Pizza hierarchy (Margherita, Pepperoni, Hawaiian extend Pizza)
-3. **Polymorphism**: ShippingStrategy interface with multiple implementations
-4. **Abstraction**: Abstract classes (Pizza, ToppingDecorator) and interfaces (ShippingStrategy)
+Dự án minh họa các nguyên lý lập trình hướng đối tượng:
 
-## 📝 License
+1. **Encapsulation (Đóng gói)**: Các trường private với getter/setter public (Pizza, CartService)
+2. **Inheritance (Kế thừa)**: Phân cấp Pizza (Margherita, Pepperoni, Hawaiian, Seafood, VeggieSupreme kế thừa Pizza)
+3. **Polymorphism (Đa hình)**: Interface ShippingStrategy với nhiều implementation
+4. **Abstraction (Trừu tượng hóa)**: Abstract classes (Pizza, ToppingDecorator) và interfaces (ShippingStrategy)
 
-This is an educational project for demonstrating design patterns and OOP principles.
+## 📝 Giấy Phép
 
-## 👨‍💻 Author
+Đây là dự án giáo dục để minh họa các mẫu thiết kế và nguyên lý OOP.
 
-Created as a comprehensive demonstration of design patterns in Java.
+## 👨‍💻 Tác Giả
+
+**Đỗ Trung Tú - 2212485**
+
+Dự án được tạo ra như một minh chứng toàn diện về các mẫu thiết kế trong Java.
 
 ---
 
-**Enjoy ordering pizza! 🍕**
-
-
-
-
-
-
+**Chúc bạn đặt pizza vui vẻ! 🍕**
