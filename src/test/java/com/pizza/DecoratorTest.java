@@ -32,7 +32,7 @@ class DecoratorTest {
         pizza = new Cheese(pizza);
         
         assertEquals(85_000, pizza.getPrice(), "Pizza with cheese should be 85,000");
-        assertTrue(pizza.getDescription().contains("Extra Cheese"), 
+        assertTrue(pizza.getDescription().contains("Phô Mai"), 
                    "Description should mention cheese");
     }
     
@@ -58,10 +58,10 @@ class DecoratorTest {
         pizza = new Mushroom(pizza);
         
         String description = pizza.getDescription();
-        assertTrue(description.contains("Pepperoni"), "Should contain pizza name");
-        assertTrue(description.contains("Extra Cheese"), "Should contain cheese");
-        assertTrue(description.contains("Bacon"), "Should contain bacon");
-        assertTrue(description.contains("Mushroom"), "Should contain mushroom");
+        assertTrue(description.contains("Pizza Pepperoni"), "Should contain pizza name");
+        assertTrue(description.contains("Phô Mai"), "Should contain cheese");
+        assertTrue(description.contains("Thịt Xông Khói"), "Should contain bacon");
+        assertTrue(description.contains("Nấm"), "Should contain mushroom");
     }
     
     @Test
@@ -73,8 +73,8 @@ class DecoratorTest {
         assertTrue(pizza instanceof ToppingDecorator, "Pizza should be a ToppingDecorator");
         
         String toppings = ((ToppingDecorator) pizza).getToppings();
-        assertTrue(toppings.contains("Extra Cheese"), "Toppings should include cheese");
-        assertTrue(toppings.contains("Bacon"), "Toppings should include bacon");
+        assertTrue(toppings.contains("Phô Mai"), "Toppings should include cheese");
+        assertTrue(toppings.contains("Thịt Xông Khói"), "Toppings should include bacon");
     }
     
     @Test
