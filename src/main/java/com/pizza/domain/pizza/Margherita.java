@@ -8,7 +8,7 @@ public class Margherita extends Pizza {
     private static final int BASE_PRICE = 60_000;
 
     public Margherita(Size size) {
-        super("Margherita", size, BASE_PRICE);
+        super("Pizza Margherita", size, BASE_PRICE);
     }
 }
 

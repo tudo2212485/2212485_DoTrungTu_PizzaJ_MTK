@@ -4,11 +4,11 @@ import com.pizza.app.CartService;
 import com.pizza.app.EventBus;
 import com.pizza.domain.decorator.ToppingDecorator;
 import com.pizza.domain.pizza.Pizza;
-import com.pizza.domain.strategy.ExpressShipping;
-import com.pizza.domain.strategy.StandardShipping;
+import com.pizza.domain.strategy.CashPayment;
+import com.pizza.domain.strategy.CardPayment;
+import com.pizza.domain.strategy.EWalletPayment;
 import com.pizza.infra.db.OrderRepository;
 import com.pizza.ui.MainApp;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -20,7 +20,12 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 /**
- * Controller for the Cart/Checkout view.
+ * Controller for the Cart/Checkout view in POS system.
+ * 
+ * SOLID PRINCIPLES APPLIED:
+ * - Single Responsibility: Manages cart UI and user interactions
+ * - Dependency Inversion: Depends on abstractions (CartService, EventBus)
+ * - Open/Closed: Can handle new payment methods without modification
  */
 public class CartController {
 
@@ -34,23 +39,17 @@ public class CartController {
     private TableColumn<Pizza, String> priceColumn;
 
     @FXML
-    private RadioButton standardShippingRadio;
+    private RadioButton cashPaymentRadio;
     @FXML
-    private RadioButton expressShippingRadio;
+    private RadioButton cardPaymentRadio;
+    @FXML
+    private RadioButton ewalletPaymentRadio;
 
-    @FXML
-    private Label subtotalLabel;
-    @FXML
-    private Label shippingLabel;
     @FXML
     private Label totalLabel;
 
     @FXML
-    private TextField nameField;
-    @FXML
-    private TextField phoneField;
-    @FXML
-    private TextArea addressArea;
+    private TextField customerNameField;
 
     @FXML
     private Button placeOrderButton;
@@ -75,32 +74,38 @@ public class CartController {
         priceColumn.setCellValueFactory(
                 data -> new SimpleStringProperty(String.format("%,dđ", data.getValue().getPrice())));
 
-        // Setup shipping radio buttons
-        ToggleGroup shippingGroup = new ToggleGroup();
-        standardShippingRadio.setToggleGroup(shippingGroup);
-        expressShippingRadio.setToggleGroup(shippingGroup);
-        standardShippingRadio.setSelected(true);
+        // Setup payment radio buttons
+        ToggleGroup paymentGroup = new ToggleGroup();
+        cashPaymentRadio.setToggleGroup(paymentGroup);
+        cardPaymentRadio.setToggleGroup(paymentGroup);
+        ewalletPaymentRadio.setToggleGroup(paymentGroup);
+        cashPaymentRadio.setSelected(true); // Cash is default for POS
 
-        standardShippingRadio.setOnAction(e -> {
-            cartService.setShippingStrategy(new StandardShipping());
-            updateTotals();
+        cashPaymentRadio.setOnAction(e -> {
+            cartService.setPaymentStrategy(new CashPayment());
+            updateTotal();
         });
 
-        expressShippingRadio.setOnAction(e -> {
-            cartService.setShippingStrategy(new ExpressShipping());
-            updateTotals();
+        cardPaymentRadio.setOnAction(e -> {
+            cartService.setPaymentStrategy(new CardPayment());
+            updateTotal();
+        });
+
+        ewalletPaymentRadio.setOnAction(e -> {
+            cartService.setPaymentStrategy(new EWalletPayment());
+            updateTotal();
         });
 
         // Load cart items
         loadCartItems();
 
-        // Update totals
-        updateTotals();
+        // Update total
+        updateTotal();
 
-        // Subscribe to cart updates
+        // Subscribe to cart updates (Observer pattern)
         eventBus.subscribe("CART_UPDATED", data -> {
             loadCartItems();
-            updateTotals();
+            updateTotal();
         });
     }
 
@@ -227,7 +232,7 @@ public class CartController {
         // Get the base pizza (without toppings)
         Pizza base = getBasePizza(original);
 
-        // Re-apply selected toppings
+        // Re-apply selected toppings (Decorator pattern)
         Pizza pizza = base;
         if (addCheese) {
             pizza = new com.pizza.domain.decorator.Cheese(pizza);
@@ -255,43 +260,42 @@ public class CartController {
 
     @FXML
     private void handlePlaceOrder() {
-        // Validate inputs
-        if (nameField.getText().trim().isEmpty()) {
-            showAlert(Alert.AlertType.ERROR, "Thiếu thông tin", "Vui lòng nhập họ tên của bạn.");
-            return;
-        }
-        if (phoneField.getText().trim().isEmpty()) {
-            showAlert(Alert.AlertType.ERROR, "Thiếu thông tin", "Vui lòng nhập số điện thoại.");
-            return;
-        }
-        if (addressArea.getText().trim().isEmpty()) {
-            showAlert(Alert.AlertType.ERROR, "Thiếu thông tin", "Vui lòng nhập địa chỉ giao hàng.");
-            return;
-        }
+        // Validate cart
         if (cartService.getItemCount() == 0) {
             showAlert(Alert.AlertType.ERROR, "Giỏ hàng trống", "Giỏ hàng trống. Vui lòng thêm món trước.");
             return;
         }
 
         try {
+            // Process payment first (Strategy pattern)
+            boolean paymentSuccess = cartService.processPayment();
+
+            if (!paymentSuccess) {
+                showAlert(Alert.AlertType.ERROR, "Thanh toán thất bại",
+                        "Không thể xử lý thanh toán. Vui lòng thử lại.");
+                return;
+            }
+
             // Save order to database
+            String customerName = customerNameField.getText().trim();
+            String paymentMethod = cartService.getPaymentStrategy().getName();
+
             int orderId = orderRepository.saveOrder(
-                    nameField.getText().trim(),
-                    phoneField.getText().trim(),
-                    addressArea.getText().trim(),
-                    cartService.getShippingStrategy().getName(),
+                    customerName,
+                    paymentMethod,
                     cartService.getItems(),
-                    cartService.getSubtotal(),
-                    cartService.getShippingFee(),
                     cartService.getTotal());
 
             // Show success message
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Đặt hàng thành công");
-            alert.setHeaderText("🎉 Đơn hàng #" + orderId + " đã được đặt!");
+            alert.setTitle("Thanh toán thành công");
+            alert.setHeaderText("🎉 Đơn hàng #" + orderId + " đã hoàn tất!");
             alert.setContentText(String.format(
-                    "Tổng tiền: %,dđ\n\nCảm ơn bạn đã đặt hàng! 🍕\nChúng tôi sẽ giao hàng sớm nhất có thể.",
-                    cartService.getTotal()));
+                    "Tổng tiền: %,dđ\n" +
+                            "Thanh toán: %s\n\n" +
+                            "Cảm ơn quý khách! 🍕",
+                    cartService.getTotal(),
+                    paymentMethod));
             alert.showAndWait();
 
             // Clear cart and return to home
@@ -332,10 +336,8 @@ public class CartController {
         });
     }
 
-    private void updateTotals() {
+    private void updateTotal() {
         javafx.application.Platform.runLater(() -> {
-            subtotalLabel.setText(String.format("%,dđ", cartService.getSubtotal()));
-            shippingLabel.setText(String.format("%,dđ", cartService.getShippingFee()));
             totalLabel.setText(String.format("%,dđ", cartService.getTotal()));
         });
     }

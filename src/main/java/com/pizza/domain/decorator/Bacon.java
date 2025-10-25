@@ -10,7 +10,7 @@ public class Bacon extends ToppingDecorator {
     private static final int BACON_PRICE = 15_000;
 
     public Bacon(Pizza pizza) {
-        super(pizza, "Bacon", BACON_PRICE);
+        super(pizza, "Thịt Xông Khói", BACON_PRICE);
     }
 }
 

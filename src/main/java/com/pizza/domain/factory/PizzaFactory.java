@@ -32,12 +32,14 @@ public class PizzaFactory {
             throw new IllegalArgumentException("Pizza type and size cannot be null");
         }
 
-        return switch (type.toLowerCase().replace(" ", "")) {
+        String normalized = type.toLowerCase().replace(" ", "").replace("pizza", "");
+        
+        return switch (normalized) {
             case "margherita" -> new Margherita(size);
             case "pepperoni" -> new Pepperoni(size);
-            case "hawaiian" -> new Hawaiian(size);
-            case "seafood" -> new Seafood(size);
-            case "veggiesupreme" -> new VeggieSupreme(size);
+            case "hawaiian", "hawaii" -> new Hawaiian(size);
+            case "seafood", "hảisản", "haisan" -> new Seafood(size);
+            case "veggiesupreme", "chayraucucu", "chayraucu" -> new VeggieSupreme(size);
             default -> throw new IllegalArgumentException("Unknown pizza type: " + type);
         };
     }

@@ -10,7 +10,7 @@ public class Mushroom extends ToppingDecorator {
     private static final int MUSHROOM_PRICE = 8_000;
 
     public Mushroom(Pizza pizza) {
-        super(pizza, "Mushroom", MUSHROOM_PRICE);
+        super(pizza, "Nấm", MUSHROOM_PRICE);
     }
 }
 

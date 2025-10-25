@@ -10,7 +10,7 @@ public class Cheese extends ToppingDecorator {
     private static final int CHEESE_PRICE = 10_000;
 
     public Cheese(Pizza pizza) {
-        super(pizza, "Extra Cheese", CHEESE_PRICE);
+        super(pizza, "Phô Mai", CHEESE_PRICE);
     }
 }
 

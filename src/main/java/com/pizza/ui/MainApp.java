@@ -19,13 +19,14 @@ public class MainApp extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         primaryStage = stage;
-        primaryStage.setTitle("🍕 Ứng Dụng Đặt Pizza");
-        primaryStage.setWidth(950);
-        primaryStage.setHeight(750);
-        primaryStage.setMinWidth(850);
-        primaryStage.setMinHeight(650);
+        primaryStage.setTitle("🍕 POS Pizza - Point of Sale");
+        primaryStage.setWidth(1280);
+        primaryStage.setHeight(800);
+        primaryStage.setMinWidth(1200);
+        primaryStage.setMinHeight(750);
 
-        showHome();
+        // Start with POS screen (single-screen interface)
+        showPos();
 
         primaryStage.setResizable(true);
         primaryStage.show();
@@ -50,6 +51,13 @@ public class MainApp extends Application {
      */
     public static void showCart() throws IOException {
         loadView("views/cart.fxml", "🍕 Ứng Dụng Đặt Pizza - Giỏ Hàng");
+    }
+
+    /**
+     * Navigate to POS (Point of Sale) view - Single screen interface.
+     */
+    public static void showPos() throws IOException {
+        loadView("views/pos.fxml", "🍕 POS Pizza - Point of Sale System");
     }
 
     /**

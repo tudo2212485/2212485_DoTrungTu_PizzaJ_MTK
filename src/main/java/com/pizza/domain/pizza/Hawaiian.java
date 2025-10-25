@@ -8,7 +8,7 @@ public class Hawaiian extends Pizza {
     private static final int BASE_PRICE = 80_000;
 
     public Hawaiian(Size size) {
-        super("Hawaiian", size, BASE_PRICE);
+        super("Pizza Hawaii", size, BASE_PRICE);
     }
 }
 

@@ -1,89 +1,106 @@
 package com.pizza;
 
-import com.pizza.domain.strategy.ExpressShipping;
-import com.pizza.domain.strategy.ShippingStrategy;
-import com.pizza.domain.strategy.StandardShipping;
+import com.pizza.domain.strategy.CashPayment;
+import com.pizza.domain.strategy.CardPayment;
+import com.pizza.domain.strategy.EWalletPayment;
+import com.pizza.domain.strategy.PaymentStrategy;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Unit tests for Shipping Strategy pattern implementations.
- * Tests boundary conditions and strategy-specific logic.
+ * Unit tests for Payment Strategy pattern implementations.
+ * Tests payment processing for different payment methods in POS system.
+ * 
+ * DEMONSTRATES:
+ * - Strategy Pattern: Interchangeable payment algorithms
+ * - Liskov Substitution Principle: All strategies can be used polymorphically
+ * - Interface Segregation: Focused PaymentStrategy interface
  */
 class StrategyTest {
-    
+
     @Test
-    void testStandardShippingBelowThreshold() {
-        ShippingStrategy strategy = new StandardShipping();
-        
-        int fee1 = strategy.calculateFee(50_000);
-        assertEquals(20_000, fee1, "Fee should be 20,000 for 50k");
-        
-        int fee2 = strategy.calculateFee(199_999);
-        assertEquals(20_000, fee2, "Fee should be 20,000 for 199,999");
+    void testCashPaymentProcessing() {
+        PaymentStrategy strategy = new CashPayment();
+
+        // Cash payment should always succeed at POS
+        assertTrue(strategy.processPayment(50_000), "Cash payment should succeed");
+        assertTrue(strategy.processPayment(200_000), "Cash payment should succeed");
+        assertTrue(strategy.processPayment(1_000_000), "Cash payment should succeed");
     }
-    
+
     @Test
-    void testStandardShippingAtThreshold() {
-        // Boundary test: exactly at 200,000
-        ShippingStrategy strategy = new StandardShipping();
-        
-        int fee = strategy.calculateFee(200_000);
-        assertEquals(0, fee, "Fee should be 0 at exactly 200,000");
+    void testCardPaymentProcessing() {
+        PaymentStrategy strategy = new CardPayment();
+
+        // Card payment should succeed (in real system, would check with gateway)
+        assertTrue(strategy.processPayment(50_000), "Card payment should succeed");
+        assertTrue(strategy.processPayment(500_000), "Card payment should succeed");
     }
-    
+
     @Test
-    void testStandardShippingAboveThreshold() {
-        ShippingStrategy strategy = new StandardShipping();
-        
-        int fee1 = strategy.calculateFee(200_001);
-        assertEquals(0, fee1, "Fee should be 0 for 200,001");
-        
-        int fee2 = strategy.calculateFee(1_000_000);
-        assertEquals(0, fee2, "Fee should be 0 for 1,000,000");
+    void testEWalletPaymentProcessing() {
+        PaymentStrategy strategy = new EWalletPayment();
+
+        // E-wallet payment should succeed (in real system, would check QR scan)
+        assertTrue(strategy.processPayment(50_000), "E-wallet payment should succeed");
+        assertTrue(strategy.processPayment(300_000), "E-wallet payment should succeed");
     }
-    
+
     @Test
-    void testExpressShippingIsFlat() {
-        ShippingStrategy strategy = new ExpressShipping();
-        
-        // Express should be 40,000 regardless of subtotal
-        assertEquals(40_000, strategy.calculateFee(0));
-        assertEquals(40_000, strategy.calculateFee(50_000));
-        assertEquals(40_000, strategy.calculateFee(200_000));
-        assertEquals(40_000, strategy.calculateFee(1_000_000));
+    void testPaymentStrategyNames() {
+        PaymentStrategy cash = new CashPayment();
+        assertEquals("Cash", cash.getName(), "Cash payment name should be 'Cash'");
+
+        PaymentStrategy card = new CardPayment();
+        assertEquals("Card", card.getName(), "Card payment name should be 'Card'");
+
+        PaymentStrategy ewallet = new EWalletPayment();
+        assertEquals("E-Wallet", ewallet.getName(), "E-Wallet payment name should be 'E-Wallet'");
     }
-    
+
     @Test
-    void testStrategyNames() {
-        ShippingStrategy standard = new StandardShipping();
-        assertEquals("Standard Shipping", standard.getName());
-        
-        ShippingStrategy express = new ExpressShipping();
-        assertEquals("Express Shipping", express.getName());
+    void testPaymentStrategyDescriptions() {
+        PaymentStrategy cash = new CashPayment();
+        assertNotNull(cash.getDescription(), "Cash should have description");
+        assertTrue(cash.getDescription().contains("quầy"), "Cash description should mention 'quầy'");
+
+        PaymentStrategy card = new CardPayment();
+        assertNotNull(card.getDescription(), "Card should have description");
+
+        PaymentStrategy ewallet = new EWalletPayment();
+        assertNotNull(ewallet.getDescription(), "E-Wallet should have description");
     }
-    
+
     @Test
     void testStrategyPolymorphism() {
-        // Test that both strategies can be used polymorphically
-        ShippingStrategy[] strategies = {
-            new StandardShipping(),
-            new ExpressShipping()
+        // Test Liskov Substitution Principle: all payment strategies can be used
+        // interchangeably
+        PaymentStrategy[] strategies = {
+                new CashPayment(),
+                new CardPayment(),
+                new EWalletPayment()
         };
-        
-        for (ShippingStrategy strategy : strategies) {
-            assertNotNull(strategy.getName());
-            assertTrue(strategy.calculateFee(100_000) >= 0);
+
+        for (PaymentStrategy strategy : strategies) {
+            assertNotNull(strategy.getName(), "Strategy should have name");
+            assertNotNull(strategy.getDescription(), "Strategy should have description");
+            assertTrue(strategy.processPayment(100_000),
+                    strategy.getName() + " should process payment successfully");
         }
     }
+
+    @Test
+    void testZeroAmountPayment() {
+        // Edge case: zero amount (free order or promotion)
+        PaymentStrategy cash = new CashPayment();
+        assertTrue(cash.processPayment(0), "Should handle zero amount payment");
+    }
+
+    @Test
+    void testLargeAmountPayment() {
+        // Test with large amount
+        PaymentStrategy card = new CardPayment();
+        assertTrue(card.processPayment(10_000_000), "Should handle large amount payment");
+    }
 }
-
-
-
-
-
-
-
-
-

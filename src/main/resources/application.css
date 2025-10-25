@@ -273,3 +273,266 @@
     -fx-border-color: #1976D2;
     -fx-border-width: 2;
 }
+
+/* =========================================
+   POS (Point of Sale) Interface Styles
+   ========================================= */
+
+/* POS Root */
+.pos-root {
+    -fx-background-color: #ecf0f1;
+}
+
+/* POS Header */
+.pos-header {
+    -fx-background-color: linear-gradient(to right, #2c3e50, #34495e);
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.3), 8, 0, 0, 3);
+}
+
+.pos-title {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.order-number {
+    -fx-text-fill: #3498db;
+    -fx-font-weight: bold;
+    -fx-background-color: rgba(255, 255, 255, 0.2);
+    -fx-padding: 5 12 5 12;
+    -fx-background-radius: 15;
+}
+
+.cashier-name {
+    -fx-text-fill: #ecf0f1;
+}
+
+.datetime {
+    -fx-text-fill: #bdc3c7;
+}
+
+/* Main Content */
+.pos-main-content {
+    -fx-background-color: #ecf0f1;
+}
+
+/* Menu Panel */
+.menu-panel {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 8, 0, 0, 2);
+}
+
+/* Order Panel */
+.order-panel {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 8, 0, 0, 2);
+}
+
+.panel-title {
+    -fx-text-fill: #2c3e50;
+    -fx-font-weight: bold;
+}
+
+/* Pizza Card Button */
+.pizza-card-button {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #3498db;
+    -fx-border-width: 2;
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+    -fx-text-fill: #2c3e50;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 5, 0, 0, 2);
+}
+
+.pizza-card-button:hover {
+    -fx-background-color: #ebf5fb;
+    -fx-border-color: #2980b9;
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+    -fx-effect: dropshadow(three-pass-box, rgba(52, 152, 219, 0.3), 10, 0, 0, 3);
+}
+
+.pizza-card-button.selected {
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+    -fx-border-color: #2980b9;
+    -fx-effect: dropshadow(three-pass-box, rgba(52, 152, 219, 0.5), 12, 0, 0, 4);
+}
+
+/* Size Buttons */
+.size-button {
+    -fx-background-color: #ecf0f1;
+    -fx-text-fill: #2c3e50;
+    -fx-font-weight: bold;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+}
+
+.size-button:selected {
+    -fx-background-color: #e74c3c;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(three-pass-box, rgba(231, 76, 60, 0.4), 8, 0, 0, 2);
+}
+
+.size-button:hover {
+    -fx-background-color: #d5dbdb;
+}
+
+/* Topping CheckBox */
+.topping-check {
+    -fx-font-size: 14px;
+    -fx-text-fill: #2c3e50;
+}
+
+.topping-check:selected .box {
+    -fx-background-color: #27ae60;
+    -fx-border-color: #229954;
+}
+
+.topping-check .box {
+    -fx-background-radius: 4;
+    -fx-border-radius: 4;
+}
+
+/* Add Button */
+.add-button {
+    -fx-background-color: #27ae60;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(39, 174, 96, 0.4), 10, 0, 0, 3);
+}
+
+.add-button:hover {
+    -fx-background-color: #229954;
+    -fx-scale-y: 1.05;
+}
+
+/* Order Items Container */
+.order-items-container {
+    -fx-background-color: #f8f9fa;
+    -fx-background-radius: 8;
+    -fx-padding: 8;
+    -fx-min-height: 250;
+    -fx-max-height: 350;
+}
+
+.order-item-box {
+    -fx-background-color: white;
+    -fx-background-radius: 6;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 1;
+    -fx-border-radius: 6;
+    -fx-cursor: hand;
+}
+
+.order-item-box:hover {
+    -fx-background-color: #f5f5f5;
+    -fx-border-color: #3498db;
+}
+
+.order-item-box.selected {
+    -fx-background-color: #ebf5fb;
+    -fx-border-color: #3498db;
+    -fx-border-width: 2;
+}
+
+/* Action Buttons */
+.action-button {
+    -fx-background-color: #95a5a6;
+    -fx-text-fill: white;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-cursor: hand;
+}
+
+.action-button:hover {
+    -fx-background-color: #7f8c8d;
+}
+
+/* Total Section */
+.total-section {
+    -fx-background-color: #fff3cd;
+    -fx-background-radius: 10;
+    -fx-border-color: #ffc107;
+    -fx-border-width: 2;
+    -fx-border-radius: 10;
+}
+
+.amount-label {
+    -fx-text-fill: #2c3e50;
+    -fx-font-weight: bold;
+}
+
+.total-amount {
+    -fx-text-fill: #e74c3c;
+    -fx-font-weight: bold;
+}
+
+.section-label {
+    -fx-text-fill: #2c3e50;
+    -fx-font-weight: bold;
+}
+
+/* Payment Buttons */
+.payment-button {
+    -fx-background-color: white;
+    -fx-text-fill: #2c3e50;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: #3498db;
+    -fx-border-width: 2px;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+}
+
+.payment-button:selected {
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+    -fx-border-color: #2980b9;
+    -fx-border-width: 2px;
+    -fx-effect: dropshadow(three-pass-box, rgba(52, 152, 219, 0.4), 10, 0, 0, 3);
+}
+
+.payment-button:hover {
+    -fx-background-color: #ecf0f1;
+    -fx-border-color: #2980b9;
+}
+
+/* Secondary Action Button */
+.secondary-action-button {
+    -fx-background-color: #95a5a6;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-cursor: hand;
+}
+
+.secondary-action-button:hover {
+    -fx-background-color: #7f8c8d;
+}
+
+/* Checkout Button */
+.checkout-button {
+    -fx-background-color: linear-gradient(to bottom, #e74c3c, #c0392b);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(231, 76, 60, 0.5), 12, 0, 0, 4);
+}
+
+.checkout-button:hover {
+    -fx-background-color: linear-gradient(to bottom, #c0392b, #a93226);
+    -fx-scale-y: 1.03;
+    -fx-effect: dropshadow(three-pass-box, rgba(231, 76, 60, 0.7), 15, 0, 0, 5);
+}

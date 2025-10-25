@@ -1,26 +1,32 @@
 package com.pizza.app;
 
 import com.pizza.domain.pizza.Pizza;
-import com.pizza.domain.strategy.ShippingStrategy;
-import com.pizza.domain.strategy.StandardShipping;
+import com.pizza.domain.strategy.PaymentStrategy;
+import com.pizza.domain.strategy.CashPayment;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Service for managing shopping cart.
+ * Service for managing shopping cart in POS system.
  * Uses Observer pattern to notify UI of cart changes.
+ * 
+ * SOLID PRINCIPLES APPLIED:
+ * - Single Responsibility: Only manages cart state and operations
+ * - Dependency Inversion: Depends on PaymentStrategy abstraction, not concrete
+ * implementations
+ * - Open/Closed: Can add new payment methods without modifying this class
  */
 public class CartService {
     private static CartService instance;
     private final List<Pizza> items;
-    private ShippingStrategy shippingStrategy;
+    private PaymentStrategy paymentStrategy;
     private final PriceCalculator priceCalculator;
     private final EventBus eventBus;
 
     private CartService() {
         this.items = new ArrayList<>();
-        this.shippingStrategy = new StandardShipping(); // Default
+        this.paymentStrategy = new CashPayment(); // Default payment method for POS
         this.priceCalculator = new PriceCalculator();
         this.eventBus = EventBus.getInstance();
     }
@@ -87,39 +93,35 @@ public class CartService {
     }
 
     /**
-     * Set shipping strategy.
-     * Publishes CART_UPDATED event as total changes.
+     * Set payment strategy.
+     * Publishes CART_UPDATED event for UI refresh.
      */
-    public void setShippingStrategy(ShippingStrategy strategy) {
-        this.shippingStrategy = strategy;
+    public void setPaymentStrategy(PaymentStrategy strategy) {
+        this.paymentStrategy = strategy;
         eventBus.publish("CART_UPDATED");
     }
 
     /**
-     * Get current shipping strategy.
+     * Get current payment strategy.
      */
-    public ShippingStrategy getShippingStrategy() {
-        return shippingStrategy;
+    public PaymentStrategy getPaymentStrategy() {
+        return paymentStrategy;
     }
 
     /**
-     * Calculate cart subtotal.
+     * Calculate cart total.
+     * For POS system, no shipping fee - just sum of items.
      */
-    public int getSubtotal() {
+    public int getTotal() {
         return priceCalculator.calculateSubtotal(items);
     }
 
     /**
-     * Calculate shipping fee.
+     * Process payment for current cart.
+     * 
+     * @return true if payment successful
      */
-    public int getShippingFee() {
-        return priceCalculator.calculateShipping(getSubtotal(), shippingStrategy);
-    }
-
-    /**
-     * Calculate cart total (subtotal + shipping).
-     */
-    public int getTotal() {
-        return priceCalculator.calculateTotal(items, shippingStrategy);
+    public boolean processPayment() {
+        return paymentStrategy.processPayment(getTotal());
     }
 }

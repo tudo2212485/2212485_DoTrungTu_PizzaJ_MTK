@@ -8,7 +8,7 @@ public class VeggieSupreme extends Pizza {
     private static final int BASE_PRICE = 70_000;
 
     public VeggieSupreme(Size size) {
-        super("Veggie Supreme", size, BASE_PRICE);
+        super("Pizza Chay Rau Củ", size, BASE_PRICE);
     }
 }
 

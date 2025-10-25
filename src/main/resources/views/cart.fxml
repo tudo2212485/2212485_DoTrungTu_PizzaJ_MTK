@@ -23,7 +23,7 @@
             
             <Region HBox.hgrow="ALWAYS"/>
             
-            <Label text="🛒 Giỏ Hàng Của Bạn" styleClass="header-title">
+            <Label text="🛒 Giỏ Hàng &amp; Thanh Toán" styleClass="header-title">
                 <font>
                     <Font name="System Bold" size="20.0"/>
                 </font>
@@ -61,23 +61,27 @@
                 </HBox>
             </VBox>
             
-            <!-- Shipping and Summary - Side by Side -->
+            <!-- Payment and Summary - Side by Side -->
             <HBox spacing="20.0" alignment="TOP_CENTER">
-                <!-- Shipping Options -->
+                <!-- Payment Options -->
                 <VBox spacing="10.0" styleClass="shipping-box" HBox.hgrow="ALWAYS">
                     <padding>
                         <Insets top="15.0" right="15.0" bottom="15.0" left="15.0"/>
                     </padding>
                     
-                    <Label text="🚚 Phương Thức Giao Hàng:" styleClass="subsection-title">
+                    <Label text="💳 Phương Thức Thanh Toán:" styleClass="subsection-title">
                         <font><Font name="System Bold" size="17.0"/></font>
                     </Label>
                     
-                    <RadioButton fx:id="standardShippingRadio" 
-                                 text="Giao hàng tiêu chuẩn (Miễn phí nếu ≥200k, còn lại 20k)"
+                    <RadioButton fx:id="cashPaymentRadio" 
+                                 text="💵 Tiền mặt - Thanh toán tại quầy"
                                  wrapText="true"/>
-                    <RadioButton fx:id="expressShippingRadio" 
-                                 text="Giao hàng nhanh (Cố định 40k)"/>
+                    <RadioButton fx:id="cardPaymentRadio" 
+                                 text="💳 Thẻ tín dụng/ghi nợ - Visa, Mastercard"
+                                 wrapText="true"/>
+                    <RadioButton fx:id="ewalletPaymentRadio" 
+                                 text="📱 Ví điện tử - MoMo, ZaloPay, VNPay"
+                                 wrapText="true"/>
                 </VBox>
                 
                 <!-- Order Summary -->
@@ -91,65 +95,45 @@
                     </Label>
                     
                     <HBox>
-                        <Label text="Tạm tính:" minWidth="120.0">
-                            <font><Font size="15.0"/></font>
+                        <Label text="Tổng cộng:" minWidth="120.0">
+                            <font><Font name="System Bold" size="20.0"/></font>
                         </Label>
-                        <Label fx:id="subtotalLabel" text="0đ">
-                            <font><Font size="15.0"/></font>
-                        </Label>
-                    </HBox>
-                    
-                    <HBox>
-                        <Label text="Phí giao hàng:" minWidth="120.0">
-                            <font><Font size="15.0"/></font>
-                        </Label>
-                        <Label fx:id="shippingLabel" text="0đ">
-                            <font><Font size="15.0"/></font>
+                        <Label fx:id="totalLabel" text="0đ" styleClass="total-text">
+                            <font><Font name="System Bold" size="20.0"/></font>
                         </Label>
                     </HBox>
                     
                     <Separator/>
                     
-                    <HBox>
-                        <Label text="Tổng cộng:" minWidth="120.0">
-                            <font><Font name="System Bold" size="18.0"/></font>
-                        </Label>
-                        <Label fx:id="totalLabel" text="0đ" styleClass="total-text">
-                            <font><Font name="System Bold" size="18.0"/></font>
-                        </Label>
-                    </HBox>
+                    <Label text="Thanh toán tại quầy" wrapText="true" 
+                           style="-fx-text-fill: #757575;">
+                        <font><Font size="13.0"/></font>
+                    </Label>
                 </VBox>
             </HBox>
             
-            <!-- Customer Information -->
+            <!-- Customer Information (Optional) -->
             <VBox spacing="10.0">
-                <Label text="📝 Thông Tin Giao Hàng:" styleClass="section-title">
+                <Label text="👤 Thông Tin Khách Hàng (tuỳ chọn):" styleClass="section-title">
                     <font><Font name="System Bold" size="19.0"/></font>
                 </Label>
                 
-                <GridPane hgap="10.0" vgap="10.0">
-                    <columnConstraints>
-                        <ColumnConstraints halignment="RIGHT" minWidth="120.0"/>
-                        <ColumnConstraints minWidth="300.0"/>
-                    </columnConstraints>
-                    
-                    <Label text="Họ tên:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-                    <TextField fx:id="nameField" promptText="Nhập họ tên của bạn" 
-                               GridPane.columnIndex="1" GridPane.rowIndex="0"/>
-                    
-                    <Label text="Số điện thoại:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-                    <TextField fx:id="phoneField" promptText="Nhập số điện thoại" 
-                               GridPane.columnIndex="1" GridPane.rowIndex="1"/>
-                    
-                    <Label text="Địa chỉ:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-                    <TextArea fx:id="addressArea" promptText="Nhập địa chỉ giao hàng" 
-                              prefRowCount="3" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
-                </GridPane>
+                <HBox spacing="10.0" alignment="CENTER_LEFT">
+                    <Label text="Họ tên:" minWidth="100.0"/>
+                    <TextField fx:id="customerNameField" promptText="Nhập tên khách hàng (không bắt buộc)" 
+                               prefWidth="400.0"/>
+                </HBox>
+                
+                <Label text="💡 Để trống nếu khách hàng không cung cấp thông tin" 
+                       style="-fx-text-fill: #757575;">
+                    <font><Font size="12.0"/></font>
+                </Label>
             </VBox>
             
             <!-- Place Order Button -->
-            <Button fx:id="placeOrderButton" text="✅ Đặt Hàng Ngay" onAction="#handlePlaceOrder" 
-                    styleClass="primary-button" prefWidth="220.0" prefHeight="50.0">
+            <Button fx:id="placeOrderButton" text="✅ Thanh Toán &amp; Hoàn Tất Đơn Hàng" 
+                    onAction="#handlePlaceOrder" 
+                    styleClass="primary-button" prefWidth="300.0" prefHeight="50.0">
                 <font>
                     <Font size="18.0"/>
                 </font>
@@ -160,8 +144,3 @@
     </center>
     
 </BorderPane>
-
-
-
-
-

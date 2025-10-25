@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx/19" 
+            xmlns:fx="http://javafx.com/fxml/1" 
+            fx:controller="com.pizza.ui.controllers.PosController"
+            styleClass="pos-root"
+            prefWidth="1280.0" prefHeight="800.0">
+    
+    <!-- Top: Header Bar -->
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="20.0" styleClass="pos-header">
+            <padding>
+                <Insets top="15.0" right="20.0" bottom="15.0" left="20.0"/>
+            </padding>
+            
+            <Label text="🍕 POS Pizza" styleClass="pos-title">
+                <font><Font name="System Bold" size="22.0"/></font>
+            </Label>
+            
+            <Label fx:id="orderNumberLabel" text="Đơn #0001" styleClass="order-number">
+                <font><Font size="16.0"/></font>
+            </Label>
+            
+            <Region HBox.hgrow="ALWAYS"/>
+            
+            <Label fx:id="cashierLabel" text="👤 Thu ngân" styleClass="cashier-name">
+                <font><Font size="14.0"/></font>
+            </Label>
+            
+            <Label fx:id="dateTimeLabel" text="26/10/2025 13:45" styleClass="datetime">
+                <font><Font size="14.0"/></font>
+            </Label>
+        </HBox>
+    </top>
+    
+    <!-- Center: Main Content -->
+    <center>
+        <HBox spacing="15.0" styleClass="pos-main-content">
+            <padding>
+                <Insets top="15.0" right="15.0" bottom="15.0" left="15.0"/>
+            </padding>
+            
+            <!-- Left Panel: Menu Selection -->
+            <VBox spacing="12.0" styleClass="menu-panel" HBox.hgrow="ALWAYS">
+                <padding>
+                    <Insets top="15.0" right="15.0" bottom="15.0" left="15.0"/>
+                </padding>
+                
+                <Label text="📋 MENU PIZZA" styleClass="panel-title">
+                    <font><Font name="System Bold" size="18.0"/></font>
+                </Label>
+                
+                <!-- Pizza Grid with ScrollPane - CHỈ PHẦN NÀY SCROLL -->
+                <ScrollPane fitToWidth="true" prefHeight="350.0" maxHeight="350.0" 
+                           style="-fx-background-color: transparent; -fx-background: transparent;">
+                    <GridPane fx:id="pizzaGrid" hgap="10.0" vgap="10.0">
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="33.33" />
+                            <ColumnConstraints percentWidth="33.33" />
+                            <ColumnConstraints percentWidth="33.33" />
+                        </columnConstraints>
+                    </GridPane>
+                </ScrollPane>
+                
+                <Separator/>
+                
+                <!-- Size Selection - CỐ ĐỊNH, KHÔNG SCROLL -->
+                <VBox spacing="8.0">
+                    <Label text="📏 KÍCH THƯỚC" styleClass="section-label">
+                        <font><Font name="System Bold" size="15.0"/></font>
+                    </Label>
+                    <HBox spacing="8.0">
+                        <ToggleButton fx:id="sizeSmall" text="S (Nhỏ)" prefWidth="100.0" prefHeight="45.0" 
+                                     styleClass="size-button"/>
+                        <ToggleButton fx:id="sizeMedium" text="M (Vừa)" prefWidth="100.0" prefHeight="45.0" 
+                                     styleClass="size-button" selected="true"/>
+                        <ToggleButton fx:id="sizeLarge" text="L (Lớn)" prefWidth="100.0" prefHeight="45.0" 
+                                     styleClass="size-button"/>
+                    </HBox>
+                </VBox>
+                
+                <!-- Topping Selection - CỐ ĐỊNH, KHÔNG SCROLL -->
+                <VBox spacing="8.0">
+                    <Label text="🧀 TOPPING" styleClass="section-label">
+                        <font><Font name="System Bold" size="15.0"/></font>
+                    </Label>
+                    <CheckBox fx:id="cheeseCheck" text="Phô mai thêm (+10,000đ)" styleClass="topping-check"/>
+                    <CheckBox fx:id="baconCheck" text="Thịt xông khói (+15,000đ)" styleClass="topping-check"/>
+                    <CheckBox fx:id="mushroomCheck" text="Nấm (+8,000đ)" styleClass="topping-check"/>
+                </VBox>
+                
+                <!-- Add to Order Button - CỐ ĐỊNH, KHÔNG SCROLL -->
+                <Button fx:id="addToOrderButton" text="➕ THÊM VÀO ĐƠN" 
+                        onAction="#handleAddToOrder"
+                        prefHeight="55.0" prefWidth="340.0" styleClass="add-button">
+                    <font><Font name="System Bold" size="16.0"/></font>
+                </Button>
+            </VBox>
+            
+            <!-- Right Panel: Order and Payment -->
+            <ScrollPane fitToWidth="true" fitToHeight="true" 
+                       style="-fx-background-color: transparent; -fx-background: transparent;"
+                       prefWidth="460.0" minWidth="460.0">
+            <VBox spacing="10.0" styleClass="order-panel">
+                <padding>
+                    <Insets top="15.0" right="15.0" bottom="15.0" left="15.0"/>
+                </padding>
+                
+                <Label text="📝 ĐƠN HÀNG HIỆN TẠI" styleClass="panel-title">
+                    <font><Font name="System Bold" size="18.0"/></font>
+                </Label>
+                
+                <!-- Order Items List -->
+                <VBox spacing="8.0" styleClass="order-items-container" prefHeight="200.0">
+                    <ScrollPane fitToWidth="true" fitToHeight="true" 
+                               style="-fx-background-color: transparent;">
+                        <VBox fx:id="orderItemsBox" spacing="6.0" style="-fx-background-color: transparent;"/>
+                    </ScrollPane>
+                </VBox>
+                
+                <!-- Order Actions -->
+                <HBox spacing="8.0" alignment="CENTER">
+                    <Button text="❌ Xóa Món" onAction="#handleRemoveItem" 
+                           prefWidth="130.0" prefHeight="40.0" styleClass="action-button"/>
+                    <Button text="✏️ Sửa Món" onAction="#handleEditItem" 
+                           prefWidth="130.0" prefHeight="40.0" styleClass="action-button"/>
+                    <Button text="🗑️ Xóa Tất Cả" onAction="#handleClearAll" 
+                           prefWidth="150.0" prefHeight="40.0" styleClass="danger-button"/>
+                </HBox>
+                
+                <Separator/>
+                
+                <!-- Total Section -->
+                <VBox spacing="10.0" styleClass="total-section">
+                    <padding>
+                        <Insets top="12.0" right="12.0" bottom="12.0" left="12.0"/>
+                    </padding>
+                    
+                    <HBox alignment="CENTER">
+                        <Label text="TỔNG CỘNG:" minWidth="150.0">
+                            <font><Font name="System Bold" size="18.0"/></font>
+                        </Label>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label fx:id="totalLabel" text="0đ" styleClass="total-amount">
+                            <font><Font name="System Bold" size="22.0"/></font>
+                        </Label>
+                    </HBox>
+                </VBox>
+                
+                <Separator/>
+                
+                <!-- Payment Method -->
+                <VBox spacing="10.0">
+                    <Label text="💳 PHƯƠNG THỨC THANH TOÁN" styleClass="section-label">
+                        <font><Font name="System Bold" size="15.0"/></font>
+                    </Label>
+                    
+                    <HBox spacing="10.0" alignment="CENTER">
+                        <ToggleButton fx:id="cashPaymentBtn" text="💵&#10;Tiền Mặt" 
+                                     prefWidth="130.0" prefHeight="70.0" 
+                                     styleClass="payment-button" selected="true"/>
+                        <ToggleButton fx:id="cardPaymentBtn" text="💳&#10;Thẻ" 
+                                     prefWidth="130.0" prefHeight="70.0" 
+                                     styleClass="payment-button"/>
+                        <ToggleButton fx:id="ewalletPaymentBtn" text="📱&#10;Ví ĐT" 
+                                     prefWidth="130.0" prefHeight="70.0" 
+                                     styleClass="payment-button"/>
+                    </HBox>
+                </VBox>
+                
+                <!-- Customer Name (Optional) -->
+                <VBox spacing="6.0">
+                    <Label text="👤 Tên khách hàng (tuỳ chọn)">
+                        <font><Font size="13.0"/></font>
+                    </Label>
+                    <TextField fx:id="customerNameField" promptText="Nhập tên khách hàng..." 
+                              prefHeight="40.0"/>
+                </VBox>
+                
+                <Separator/>
+                
+                <!-- Action Buttons -->
+                <HBox spacing="10.0">
+                    <Button text="🖨️ IN HÓA ĐƠN" onAction="#handlePrintReceipt"
+                           prefWidth="200.0" prefHeight="55.0" styleClass="secondary-action-button">
+                        <font><Font name="System Bold" size="14.0"/></font>
+                    </Button>
+                    
+                    <Button text="✅ HOÀN TẤT THANH TOÁN" onAction="#handleCheckout"
+                           prefWidth="200.0" prefHeight="55.0" styleClass="checkout-button">
+                        <font><Font name="System Bold" size="15.0"/></font>
+                    </Button>
+                </HBox>
+            </VBox>
+            </ScrollPane>
+        </HBox>
+    </center>
+    
+</BorderPane>
